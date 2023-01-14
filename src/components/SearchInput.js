@@ -23,7 +23,7 @@ const SearchInput = ({
     if (input) {
       axios
         .get(
-          `/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
         )
         .then((response) => {
           if (response.data && response.data.predictions) return setSearchResults(response.data.predictions);
