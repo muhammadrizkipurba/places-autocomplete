@@ -11,6 +11,12 @@ import { DeleteForever, Search } from "@mui/icons-material";
 import { resetSearchHistory, setSelectedPlace } from "../redux/actions";
 
 const SearchHistory = ({ history, resetSearchHistory, setSelectedPlace }) => {
+  
+  const onClearHistory = () => {
+    setSelectedPlace(null);
+    resetSearchHistory();
+  };
+
   return (
     <Box>
       <Box
@@ -22,7 +28,7 @@ const SearchHistory = ({ history, resetSearchHistory, setSelectedPlace }) => {
         <Typography variant="string" fontWeight="bold">
           Search History
         </Typography>
-        <Button onClick={resetSearchHistory} color="error" variant="outlined">
+        <Button onClick={onClearHistory} color="error" variant="outlined">
           <Box
             display="flex"
             flexWrap="wrap"
