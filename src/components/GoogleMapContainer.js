@@ -1,9 +1,11 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
-const center = {lat: 3.0489479434800315, lng: 101.44697147630937};
 
-const GoogleMapContainer = () => {
+const GoogleMapContainer = ({defaultPosition, position}) => {
+
+  const showMarker = JSON.stringify(defaultPosition) !== JSON.stringify(position);
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY
   });
@@ -23,14 +25,14 @@ const GoogleMapContainer = () => {
       height="100%"
     >
       <GoogleMap
-        center={center}
+        center={position}
         zoom={15}
         mapContainerStyle={{
           width: "100%",
           height: "100%"
         }}
       >
-
+        {showMarker && <MarkerF position={position} />}
       </GoogleMap>
     </Stack>
   )

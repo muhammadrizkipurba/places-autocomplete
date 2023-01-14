@@ -1,9 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Autocomplete, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
+import {
+  getPlaceDetails,
+  addPlaceHistory,
+  setSelectedPlace,
+} from "../redux/actions";
+import { connect } from "react-redux";
 
-const SearchInput = ({ setSelectedPlace }) => {
+const SearchInput = ({
+  setPosition,
+  selectedPlace,
+  setSelectedPlace,
+  getPlaceDetails,
+  addPlaceHistory,
+}) => {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -14,8 +26,8 @@ const SearchInput = ({ setSelectedPlace }) => {
           `/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
         )
         .then((response) => {
-          if(response.data) return setSearchResults(response.data.predictions);
-        })
+          if (response.data) return setSearchResults(response.data.predictions);
+        });
     }
 
     return;
@@ -25,13 +37,37 @@ const SearchInput = ({ setSelectedPlace }) => {
     fetchPlaces();
   }, [fetchPlaces]);
 
+  useMemo(async () => {
+    try {
+      if (selectedPlace) {
+        const placePosition = await getPlaceDetails(selectedPlace.place_id);
+        return setPosition(placePosition.result.geometry.location);
+      }
+      return;
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedPlace, getPlaceDetails, setPosition]);
+
+  const onSelectHandler = (value) => {
+    setSelectedPlace(value);
+
+    // SAVE SELECTED PLACE HISTORY
+    const { place_id, description, terms } = value;
+    const payload = {
+      place_id,
+      description,
+      terms,
+    };
+
+    addPlaceHistory(payload);
+  };
+
   return (
     <Stack marginX="auto" marginY="2rem">
       <Autocomplete
         id="place-search-input"
-        getOptionLabel={(searchResults) =>
-          `${searchResults.description}`
-        }
+        getOptionLabel={(searchResults) => `${searchResults.description}`}
         options={searchResults}
         sx={{
           width: "100%",
@@ -45,16 +81,19 @@ const SearchInput = ({ setSelectedPlace }) => {
             {searchResults.description}
           </Box>
         )}
+        defaultValue={selectedPlace}
         onChange={(event, value) => {
           setInput(event.target.value);
-          setSelectedPlace(value)
+          if (value) {
+            onSelectHandler(value);
+          }
         }}
         renderInput={(params) => (
           <TextField
             {...params}
             label="Search place"
             style={{
-              backgroundColor: "white"
+              backgroundColor: "white",
             }}
             onChange={({ target }) => setInput(target.value)}
           />
@@ -64,4 +103,15 @@ const SearchInput = ({ setSelectedPlace }) => {
   );
 };
 
-export default SearchInput;
+const mapStateToProps = (state) => {
+  const { selectedPlace } = state;
+  return {
+    selectedPlace,
+  };
+};
+
+export default connect(mapStateToProps, {
+  getPlaceDetails,
+  addPlaceHistory,
+  setSelectedPlace,
+})(SearchInput);

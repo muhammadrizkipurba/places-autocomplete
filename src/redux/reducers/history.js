@@ -6,9 +6,9 @@ const initialState = [];
 const history = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_SEARCH_HISTORY:
-      return action.payload;
+      return [action.payload, ...state];
     case RESET_SEARCH_HISTORY:
-      return [];
+      return action.payload;
     default:
       return state;
   }
