@@ -21,13 +21,14 @@ const SearchInput = ({
 
   const fetchPlaces = useCallback(() => {
     if (input) {
-      axios
-        .get(
-          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
-        )
-        .then((response) => {
-          if (response.data && response.data.predictions) return setSearchResults(response.data.predictions);
-        });
+      axios({
+        method: "get",
+        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
+        headers: {}
+      }).then((response) => {
+        if (response.data && response.data.predictions)
+          return setSearchResults(response.data.predictions);
+      });
     }
 
     return;
