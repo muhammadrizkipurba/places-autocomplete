@@ -46,8 +46,8 @@ const SearchHistory = ({ history, resetSearchHistory, setSelectedPlace }) => {
         { history.length > 0 &&
           history.reverse().map((item) => (
             <ListItem key={item.place_id} disablePadding>
-              <Button style={{padding: '10px', borderRadius: 5}} onClick={() => setSelectedPlace(item)}>
-                <Box display="flex" flexDirection="row" alignItems="center">
+              <Button style={{padding: '10px', borderRadius: 5, width: '100%'}} onClick={() => setSelectedPlace(item)}>
+                <Box display="flex" flexDirection="row" alignItems="center" width="100%">
                   <Search fontSize="medium" htmlColor="black" />
                   <Box display="flex" flexDirection="column" alignItems="start" marginLeft={2}>
                     <Typography variant="string" color="black">{item.terms[0].value}</Typography>
