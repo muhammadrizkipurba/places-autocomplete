@@ -23,7 +23,7 @@ const SearchInput = ({
     if (input) {
       axios({
         method: "GET",
-        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
+        url: `/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
         headers: {
           "Access-Control-Allow-Origin": '*',
           "Access-Control-Allow-Methods": 'GET',
