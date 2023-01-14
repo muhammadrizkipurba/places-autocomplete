@@ -23,11 +23,8 @@ const SearchInput = ({
     if (input) {
       axios({
         method: "GET",
-        url: `/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
-        headers: {
-          "Access-Control-Allow-Origin": '*',
-          "Access-Control-Allow-Methods": 'GET',
-        }
+        url: `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
+        headers: {}
       }).then((response) => {
         if (response.data && response.data.predictions)
           return setSearchResults(response.data.predictions);
