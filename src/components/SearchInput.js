@@ -26,7 +26,7 @@ const SearchInput = ({
           `/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
         )
         .then((response) => {
-          if (response.data) return setSearchResults(response.data.predictions);
+          if (response.data && response.data.predictions) return setSearchResults(response.data.predictions);
         });
     }
 
@@ -81,7 +81,7 @@ const SearchInput = ({
             {searchResults.description}
           </Box>
         )}
-        defaultValue={selectedPlace}
+        value={selectedPlace}
         onChange={(event, value) => {
           setInput(event.target.value);
           if (value) {
