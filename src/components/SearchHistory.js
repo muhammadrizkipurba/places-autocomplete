@@ -50,8 +50,8 @@ const SearchHistory = ({ history, resetSearchHistory, setSelectedPlace }) => {
                 <Box display="flex" flexDirection="row" alignItems="center" width="100%">
                   <Search fontSize="medium" htmlColor="black" />
                   <Box display="flex" flexDirection="column" alignItems="start" marginLeft={2}>
-                    <Typography variant="string" color="black">{item.terms[0].value}</Typography>
-                    <Typography variant="caption" color="gray" textAlign="left">{item.description}</Typography>
+                    <Typography variant="string" color="black">{item.name}</Typography>
+                    <Typography variant="caption" color="gray" textAlign="left">{item.address}</Typography>
                   </Box>
                 </Box>
               </Button>
