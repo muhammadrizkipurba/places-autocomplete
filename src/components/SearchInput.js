@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Stack, TextField } from "@mui/material";
 import {
-  getPlaceDetails,
   addPlaceHistory,
   setSelectedPlace,
 } from "../redux/actions";
@@ -75,7 +74,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  getPlaceDetails,
   addPlaceHistory,
   setSelectedPlace,
 })(SearchInput);
