@@ -1,17 +1,30 @@
 import { useEffect, useRef } from "react";
-import { Stack, TextField } from "@mui/material";
-import {
-  addPlaceHistory,
-  setSelectedPlace,
-} from "../redux/actions";
 import { connect } from "react-redux";
+import { Button, InputAdornment, Stack, TextField } from "@mui/material";
 
-const SearchInput = ({
-  setSelectedPlace,
-  addPlaceHistory,
-}) => {
+import CloseIcon from '@mui/icons-material/Close';
+
+import { addPlaceHistory, setSelectedPlace } from "../redux/actions";
+
+const ClearInputButton = ({ onClick }) => {
+  return (
+    <InputAdornment position="end">
+      <Button onClick={onClick} variant="text" size="small" style={{padding: 0, minWidth: 0}}>
+        <CloseIcon htmlColor="black" />
+      </Button>
+    </InputAdornment>
+  )
+}
+
+const SearchInput = ({ selectedPlace, setSelectedPlace, addPlaceHistory }) => {
   const autoCompleteRef = useRef();
   const inputRef = useRef();
+
+  useEffect(() => {
+    if (selectedPlace) {
+      inputRef.current.value = `${selectedPlace.name}, ${selectedPlace.address}`;
+    }
+  }, [selectedPlace]);
 
   useEffect(() => {
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
@@ -19,12 +32,12 @@ const SearchInput = ({
     );
     autoCompleteRef.current.addListener("place_changed", async function () {
       const place = await autoCompleteRef.current.getPlace();
-      
+
       // SAVE SELECTED PLACE HISTORY
       const { place_id, name, formatted_address, geometry } = place;
       const parsed_geometry = {
         lat: geometry.location.lat(),
-        lng: geometry.location.lng()
+        lng: geometry.location.lng(),
       };
 
       const payload = {
@@ -52,6 +65,11 @@ const SearchInput = ({
     }
   });
 
+  const clearInputHandler = () => {
+    if(inputRef.current.value) inputRef.current.value = "";
+    setSelectedPlace(null);
+  };
+
   return (
     <Stack marginX="auto" marginY="2rem">
       <TextField
@@ -60,6 +78,9 @@ const SearchInput = ({
         className="pac-target-input"
         style={{
           backgroundColor: "white",
+        }}
+        InputProps={{
+          endAdornment: <ClearInputButton onClick={clearInputHandler} />
         }}
       />
     </Stack>

@@ -17,6 +17,8 @@ const SearchHistory = ({ history, resetSearchHistory, setSelectedPlace }) => {
     resetSearchHistory();
   };
 
+  if(history.length === 0) return null;
+
   return (
     <Box>
       <Box
